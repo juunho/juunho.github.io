@@ -1,6 +1,6 @@
 title: My GitHub Blog
 description: "Welcome to my GitHub Pages blog!"
-theme: minima  # 원하는 테마 적용 가능
+remote_theme: aterenin/minima-reboot
 markdown: kramdown  # GitHub Pages의 기본 Markdown 엔진
 kramdown:
   math_engine: mathjax
