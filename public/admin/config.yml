@@ -1,67 +1,36 @@
-import type { APIRoute } from 'astro';
-
-/**
- * 어드민 (Sveltia CMS). https://juunho.github.io/admin/
- *
- * 어디서든 — 다른 PC, 폰 — 글을 쓸 수 있게 배포합니다.
- *
- * ## 접근에 대해
- *
- * GitHub Pages 는 정적 호스팅이라 배포된 파일 앞에 인증을 세울 수 없습니다.
- * 그래서 이 URL 자체는 누구나 열 수 있습니다. 다만 **열어도 아무것도 없습니다** —
- * 이 페이지는 빈 껍데기이고, 이 저장소에 쓰기 권한이 있는 GitHub 자격증명이
- * 없으면 로그인 화면에서 더 나아가지 못합니다. 초안을 읽을 수도, 무언가를
- * 쓸 수도 없습니다. 아래 config 가 드러내는 것은 폴더 이름뿐인데, 저장소가
- * 어차피 공개라 새로 새는 정보도 없습니다.
- *
- * URL 존재 자체를 감추려면 GitHub Pages 를 벗어나야 합니다
- * (예: Cloudflare Pages + Cloudflare Access).
- *
- * ## 로그인
- *
- * 로그인 화면의 **Sign In with Token** 을 누르면 필요한 권한이 미리 선택된
- * GitHub 토큰 발급 링크가 뜹니다. fine-grained 토큰을 이 저장소 하나로,
- * Contents: Read and write 만 주고 만드세요. 토큰은 그 브라우저에만 저장되고
- * 저장소에는 절대 들어가지 않습니다.
- *
- * "Sign in with GitHub" 버튼(OAuth)으로 바꾸려면 인증용 서버가 하나 필요합니다.
- * sveltia-cms-auth 를 Cloudflare Workers 무료 플랜에 올리고, 아래 backend 에
- * base_url 한 줄을 추가하면 됩니다.
- *
- * ## 로컬에서 쓰기
- *
- * npm run dev → http://localhost:4321/admin/index.html 을 Chrome/Edge/Brave 로
- * 열면 토큰 없이 로컬 파일을 직접 고치는 모드로 동작합니다 (File System
- * Access API). 배포본과 같은 설정을 그대로 씁니다.
- */
-
-export function getStaticPaths() {
-  // index.html 을 명시적으로 씁니다. slug 없이 /admin 을 함께 등록하면
-  // 두 경로가 같은 출력 파일로 겹쳐서 빌드가 막힙니다.
-  return [{ params: { slug: 'index.html' } }, { params: { slug: 'config.yml' } }];
-}
-
-const SHELL = `<!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>juunho — 어드민</title>
-    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
-  </head>
-  <body>
-    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"><\/script>
-  </body>
-</html>
-`;
-
-/**
- * Sveltia 설정. 위젯 이름과 필드는 src/content.config.ts 의 스키마와
- * 맞춰야 합니다 — 한쪽만 고치면 저장한 파일이 스키마 검증에서 걸립니다.
- */
-const CONFIG = `# 이 파일은 src/pages/admin/[...slug].ts 가 dev 서버에서만 생성합니다.
-# 고치려면 그 파일을 여세요.
+# 어드민(/admin/)의 폼 정의입니다. 이 파일을 고치면 폼이 바뀝니다.
+#
+# 어디서 고치나
+#   - github.com 에서 이 파일을 열고 연필 아이콘 → 커밋 (폰에서도 됩니다)
+#   - 또는 로컬에서 고치고 push
+#   어드민 화면 안에서 이 파일을 고칠 수는 없습니다. Sveltia 에 설정 편집
+#   UI 가 아직 없습니다(로드맵에는 있음).
+#
+# ⚠️ YAML 문법이 깨지면 어드민이 열리지 않습니다.
+#   그때는 github.com 에서 이 파일을 되돌리면 살아납니다. 저장소에 있는
+#   그냥 텍스트 파일이라 복구는 항상 가능합니다.
+#
+# 마음대로 고쳐도 되는 것 (여기만 바꾸면 끝)
+#   label, label_singular, description, hint  — 화면에 보이는 문구
+#   fields 순서                                — 폼에서의 위아래
+#   required, default, collapsed               — 입력 편의
+#   sortable_fields, summary, view_groups      — 목록 화면
+#
+# 필드를 새로 추가하는 것도 안전합니다.
+#   모르는 항목은 사이트 빌드에서 조용히 무시되므로 빌드가 깨지지 않습니다.
+#   다만 그 값이 화면에 나오게 하려면 두 곳을 더 고쳐야 합니다:
+#     1) src/content.config.ts   — 스키마에 필드 추가
+#     2) 해당 컴포넌트/레이아웃    — 실제로 출력
+#
+# 필드를 지우거나 이름을 바꿀 때는 조심하세요.
+#   src/content.config.ts 에서 필수(required)로 잡혀 있는 항목을 폼에서
+#   없애면, 그 뒤로 저장한 글이 빌드에서 걸립니다. 지우기 전에 그쪽을
+#   먼저 optional 로 바꾸세요.
+#
+# 지금 필수인 항목
+#   글       title, date
+#   해온 일   title, kind, period, order, summary
+#   북마크    title, date, url, source
 
 backend:
   name: github
@@ -224,19 +193,3 @@ collections:
               { name: label, label: 표시할 문구, widget: string },
             ],
         }
-`;
-
-export const GET: APIRoute = ({ params }) => {
-  if (params.slug === 'config.yml') {
-    return new Response(CONFIG, {
-      headers: { 'content-type': 'text/yaml; charset=utf-8' },
-    });
-  }
-
-  return new Response(SHELL, {
-    headers: {
-      'content-type': 'text/html; charset=utf-8',
-      'x-robots-tag': 'noindex, nofollow',
-    },
-  });
-};
