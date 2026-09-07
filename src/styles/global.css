@@ -19,8 +19,10 @@
   --serif: var(--font-display), Georgia, serif;
   --mono: var(--font-mono), ui-monospace, monospace;
 
-  --measure: 34rem;
-  --page: 52.5rem;
+  /* 홈·태그 등 목록 화면 */
+  --page: 58rem;
+  /* 본문처럼 한 줄 길이가 중요한 화면 */
+  --page-narrow: 45rem;
   --gutter: 1.875rem;
 
   color-scheme: light;
@@ -137,7 +139,7 @@ video {
 }
 
 .page--narrow {
-  max-width: 41.25rem;
+  max-width: var(--page-narrow);
 }
 
 /* 섹션 라벨 — 우측으로 괘선이 뻗는 형태 */
