@@ -1,7 +1,9 @@
 # 다른 곳에 쓴 글 (북마크).
 #
-# 항목 하나 추가 = 아래 형식으로 4~5줄. id 는 쓸 필요 없습니다.
+# 어드민(/admin/)에서 편집할 수 있고, 여기서 직접 고쳐도 됩니다.
 # 날짜순 정렬은 자동이라 순서는 신경 쓰지 않아도 됩니다.
+#
+# 항목 하나 추가 = 아래 형식으로 4~5줄. id 는 쓸 필요 없습니다.
 #
 #   - title: "글 제목"
 #     date: 2026-07-11
@@ -12,15 +14,16 @@
 #
 # 아래 두 개는 형식을 보여주는 예시입니다. 실제 링크로 바꾸거나 지우세요.
 
-- title: "RAG 검색 품질을 어떻게 측정할 것인가"
-  date: 2026-07-11
-  url: https://velog.io/@juunho/rag-retrieval-eval
-  source: velog
-  tags: [RAG, Evaluation]
-  note: "MRR과 Recall 중 무엇을 봐야 하는지에 대한 글입니다."
+links:
+  - title: "RAG 검색 품질을 어떻게 측정할 것인가"
+    date: 2026-07-11
+    url: https://velog.io/@juunho/rag-retrieval-eval
+    source: velog
+    tags: [RAG, Evaluation]
+    note: "MRR과 Recall 중 무엇을 봐야 하는지에 대한 글입니다."
 
-- title: "하드 네거티브 채굴이 검색 성능을 바꾸는 지점"
-  date: 2026-02-14
-  url: https://medium.com/@juunho/hard-negative-mining
-  source: Medium
-  tags: [Embedding, Contrastive Learning]
+  - title: "하드 네거티브 채굴이 검색 성능을 바꾸는 지점"
+    date: 2026-02-14
+    url: https://medium.com/@juunho/hard-negative-mining
+    source: Medium
+    tags: [Embedding, Contrastive Learning]
