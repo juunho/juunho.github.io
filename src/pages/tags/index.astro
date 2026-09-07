@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getWritingByTag, tagHref } from '../../lib/writing';
+
+const byTag = await getWritingByTag();
+---
+
+<Base title="태그" description="주제별로 묶은 글 목록.">
+  <div class="page page--narrow">
+    <header class="head">
+      <h1 class="display">태그</h1>
+      <p class="note">여기 쓴 글과 다른 데 쓴 글이 함께 묶입니다.</p>
+    </header>
+
+    <ul class="tags">
+      {
+        [...byTag.entries()].map(([tag, entries]) => (
+          <li>
+            <a href={tagHref(tag)}>
+              <span class="name underline-grow">{tag}</span>
+              <span class="count">{entries.length}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .head {
+    padding: 3rem 0 1.75rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+  }
+
+  .note {
+    margin: 1rem 0 0;
+    color: var(--dim);
+    font-size: 0.875rem;
+  }
+
+  .tags {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .tags a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--edge);
+    border-radius: 3px;
+    transition: border-color 0.2s ease;
+  }
+  .tags a:hover {
+    border-color: var(--acc);
+  }
+
+  .name {
+    font-family: var(--serif);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .count {
+    font-family: var(--mono);
+    font-size: 0.688rem;
+    color: var(--dim);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

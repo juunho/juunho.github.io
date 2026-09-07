@@ -1,0 +1,43 @@
+---
+import { GISCUS } from '../consts';
+
+/**
+ * 설정이 채워져 있을 때만 렌더링됩니다.
+ * 켜는 방법은 src/consts.ts 의 GISCUS 주석 참고.
+ */
+const ready = GISCUS.enabled && GISCUS.repoId !== '' && GISCUS.categoryId !== '';
+---
+
+{
+  ready && (
+    <section class="comments">
+      <h2 class="label">댓글</h2>
+      <script
+        is:inline
+        src="https://giscus.app/client.js"
+        data-repo={GISCUS.repo}
+        data-repo-id={GISCUS.repoId}
+        data-category={GISCUS.category}
+        data-category-id={GISCUS.categoryId}
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="ko"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async
+      />
+    </section>
+  )
+}
+
+<style>
+  .comments {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+  }
+</style>
