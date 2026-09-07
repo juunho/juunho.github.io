@@ -1,0 +1,91 @@
+---
+import { NAV, SITE } from '../consts';
+import ThemeToggle from './ThemeToggle.astro';
+
+const path = Astro.url.pathname;
+
+function isCurrent(href: string): boolean {
+  return href === '/' ? path === '/' : path.startsWith(href);
+}
+---
+
+<header class="site-header">
+  <div class="page inner">
+    <a href="/" class="sig">{SITE.title}</a>
+    <nav aria-label="주요">
+      <ul>
+        {
+          NAV.filter((item) => item.href !== '/').map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    padding: 1.625rem 0 0;
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .sig {
+    font-family: var(--mono);
+    font-size: 0.688rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    transition: color 0.2s ease;
+  }
+  .sig:hover {
+    color: var(--ink);
+  }
+
+  nav {
+    margin-left: auto;
+  }
+
+  ul {
+    display: flex;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.813rem;
+  }
+
+  a {
+    color: var(--dim);
+    transition: color 0.2s ease;
+  }
+  a:hover {
+    color: var(--acc);
+  }
+  a[aria-current='page'] {
+    color: var(--ink);
+  }
+
+  @media (max-width: 30rem) {
+    ul {
+      gap: 0.875rem;
+      font-size: 0.75rem;
+    }
+    .inner {
+      gap: 0.75rem;
+    }
+  }
+</style>

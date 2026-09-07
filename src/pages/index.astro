@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import WorkList from '../components/WorkList.astro';
+import WritingList from '../components/WritingList.astro';
+import { getWriting } from '../lib/writing';
+import { HOME_WRITING_LIMIT, SITE, SOCIAL } from '../consts';
+
+const writing = (await getWriting()).slice(0, HOME_WRITING_LIMIT);
+const [line1, line2] = SITE.headline;
+---
+
+<Base>
+  <div class="page">
+    <header class="masthead">
+      <h1 class="display">
+        {line1}<br /><span>{line2}</span>
+      </h1>
+      <p class="bio">{SITE.bio}</p>
+      <div class="links">
+        {
+          SOCIAL.map((item) => (
+            <a
+              href={item.href}
+              target={item.href.startsWith('http') ? '_blank' : undefined}
+              rel={
+                item.href.startsWith('http') ? 'noopener noreferrer' : undefined
+              }
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 class="label"><span class="n">01</span> 해온 일</h2>
+      <WorkList />
+    </section>
+
+    <section class="section">
+      <h2 class="label"><span class="n">02</span> 쓴 글</h2>
+      <WritingList entries={writing} />
+      <a class="more" href="/writing/">글 전체 보기 →</a>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .masthead {
+    padding: 3.5rem 0 2.5rem;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 8vw, 3.875rem);
+    max-width: 17ch;
+  }
+  h1 span {
+    color: var(--acc);
+  }
+
+  .bio {
+    margin: 1.375rem 0 0;
+    max-width: 50ch;
+    color: var(--dim);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+  }
+
+  .links {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.5rem 1.125rem;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 0.688rem;
+    color: var(--dim);
+  }
+  .links a {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .links a:hover {
+    color: var(--acc);
+    border-color: var(--acc);
+  }
+
+  .section + .section {
+    margin-top: 2.875rem;
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 1.375rem;
+    font-family: var(--mono);
+    font-size: 0.719rem;
+    color: var(--acc);
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+  }
+</style>

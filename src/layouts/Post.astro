@@ -1,0 +1,113 @@
+---
+import 'katex/dist/katex.min.css';
+
+import Base from '../layouts/Base.astro';
+import Giscus from '../components/Giscus.astro';
+import { formatDate, tagHref } from '../lib/writing';
+
+interface Props {
+  title: string;
+  date: Date;
+  description?: string;
+  tags: string[];
+  draft?: boolean;
+  readingMinutes?: number;
+}
+
+const { title, date, description, tags, draft, readingMinutes } = Astro.props;
+---
+
+<Base
+  title={title}
+  description={description}
+  type="article"
+  publishedAt={date}
+>
+  <article class="page page--narrow">
+    <header class="head">
+      {draft && <p class="draft">초안 — 아직 공개되지 않은 글입니다</p>}
+      <h1 class="display">{title}</h1>
+      {description && <p class="dek">{description}</p>}
+      <div class="byline">
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        {readingMinutes && <span>{readingMinutes}분</span>}
+        {
+          tags.length > 0 && (
+            <span class="tags">
+              {tags.map((tag) => (
+                <a href={tagHref(tag)}>{tag}</a>
+              ))}
+            </span>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="prose" data-pagefind-body>
+      <slot />
+    </div>
+
+    <Giscus />
+  </article>
+</Base>
+
+<style>
+  .head {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 2.25rem;
+  }
+
+  h1 {
+    font-size: clamp(1.875rem, 5.5vw, 2.5rem);
+    line-height: 1.16;
+    letter-spacing: -0.028em;
+  }
+
+  .draft {
+    margin: 0 0 1rem;
+    font-family: var(--mono);
+    font-size: 0.688rem;
+    letter-spacing: 0.06em;
+    color: var(--acc);
+    border: 1px solid var(--acc);
+    border-radius: 3px;
+    padding: 0.375rem 0.625rem;
+    display: inline-block;
+  }
+
+  .dek {
+    margin: 1rem 0 0;
+    color: var(--dim);
+    font-size: 0.969rem;
+    line-height: 1.7;
+    max-width: 52ch;
+  }
+
+  .byline {
+    margin-top: 1.125rem;
+    display: flex;
+    gap: 0.5rem 0.875rem;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 0.688rem;
+    color: var(--dim);
+  }
+
+  .tags {
+    display: flex;
+    gap: 0.625rem;
+    flex-wrap: wrap;
+  }
+  .tags a {
+    color: var(--dim);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .tags a:hover {
+    color: var(--acc);
+    border-color: var(--acc);
+  }
+</style>

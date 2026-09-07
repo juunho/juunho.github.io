@@ -1,0 +1,35 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Post from '../../layouts/Post.astro';
+
+export async function getStaticPaths() {
+  // dev 서버에서는 초안도 열어볼 수 있게 하고, 빌드에서는 제외합니다.
+  const posts = await getCollection('posts', ({ data }) =>
+    import.meta.env.DEV ? true : !data.draft,
+  );
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+type Props = { post: CollectionEntry<'posts'> };
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+/** 한글은 분당 약 500자로 잡습니다. */
+const readingMinutes = Math.max(1, Math.round(post.body!.length / 500));
+---
+
+<Post
+  title={post.data.title}
+  date={post.data.date}
+  description={post.data.description}
+  tags={post.data.tags}
+  draft={post.data.draft}
+  readingMinutes={readingMinutes}
+>
+  <Content />
+</Post>

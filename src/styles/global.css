@@ -1,0 +1,428 @@
+/* ============================================================
+   토큰
+   라이트가 기본. 다크는 (1) OS 설정 (2) 수동 토글 두 경로 모두에서
+   같은 토큰을 덮어씁니다. 색은 반드시 :root 에 먼저 선언하고,
+   미디어쿼리/속성 블록에서는 값만 바꿉니다.
+   ============================================================ */
+:root {
+  --paper: #f6f6f3;
+  --ink: #15171a;
+  --dim: #70747a;
+  --rule: #e1e1db;
+  --edge: #d4d4cc;
+  --chip: #edede7;
+  --acc: #2233b5;
+  --acc-soft: #2233b51a;
+  --sel: #2233b524;
+
+  --sans: var(--font-body), system-ui, -apple-system, sans-serif;
+  --serif: var(--font-display), Georgia, serif;
+  --mono: var(--font-mono), ui-monospace, monospace;
+
+  --measure: 34rem;
+  --page: 52.5rem;
+  --gutter: 1.875rem;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #0f1217;
+    --ink: #e9eaec;
+    --dim: #8b9099;
+    --rule: #232830;
+    --edge: #2a3039;
+    --chip: #171c23;
+    --acc: #9aaaff;
+    --acc-soft: #9aaaff1f;
+    --sel: #9aaaff2b;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --paper: #0f1217;
+  --ink: #e9eaec;
+  --dim: #8b9099;
+  --rule: #232830;
+  --edge: #2a3039;
+  --chip: #171c23;
+  --acc: #9aaaff;
+  --acc-soft: #9aaaff1f;
+  --sel: #9aaaff2b;
+  color-scheme: dark;
+}
+
+/* ============================================================
+   기본
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--sel);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 키보드 사용자를 위한 본문 바로가기 */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--acc);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+.skip-link:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+}
+
+/* ============================================================
+   레이아웃
+   ============================================================ */
+.page {
+  max-width: var(--page);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.page--narrow {
+  max-width: 41.25rem;
+}
+
+/* 섹션 라벨 — 우측으로 괘선이 뻗는 형태 */
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.125rem;
+  font-family: var(--mono);
+  font-size: 0.656rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.label .n {
+  color: var(--acc);
+}
+
+/* ============================================================
+   타이포
+   ============================================================ */
+.display {
+  font-family: var(--serif);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.mono-meta {
+  font-family: var(--mono);
+  font-size: 0.688rem;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 링크에 밑줄이 좌→우로 그려지는 공통 효과 */
+.underline-grow {
+  background-image: linear-gradient(var(--acc), var(--acc));
+  background-size: 0 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.28s ease;
+}
+a:hover .underline-grow,
+a.underline-grow:hover {
+  background-size: 100% 1px;
+}
+
+.chip {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  background: var(--chip);
+  padding: 0.188rem 0.5rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   본문 (마크다운 렌더 영역)
+   ============================================================ */
+.prose {
+  font-size: 0.969rem;
+  line-height: 1.85;
+}
+
+.prose > * + * {
+  margin-top: 1.125rem;
+}
+
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.3;
+  text-wrap: balance;
+  scroll-margin-top: 2rem;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+.prose h3 {
+  font-size: 1.219rem;
+  margin-top: 2.25rem;
+}
+.prose h4 {
+  font-size: 1.063rem;
+  margin-top: 1.75rem;
+}
+.prose h5,
+.prose h6 {
+  font-size: 0.938rem;
+  margin-top: 1.5rem;
+  color: var(--dim);
+}
+
+.prose h2 + *,
+.prose h3 + *,
+.prose h4 + *,
+.prose h5 + *,
+.prose h6 + * {
+  margin-top: 0.75rem;
+}
+
+/* 제목에 앵커 링크 (heading id 는 Sätteri 가 붙여줍니다) */
+.prose :is(h2, h3, h4) > a[href^='#'] {
+  color: inherit;
+}
+
+.prose p {
+  margin: 0;
+}
+
+.prose a:not(.no-underline) {
+  color: var(--acc);
+  border-bottom: 1px solid var(--acc-soft);
+  transition: border-color 0.2s ease;
+}
+.prose a:not(.no-underline):hover {
+  border-bottom-color: var(--acc);
+}
+
+.prose ul,
+.prose ol {
+  margin-top: 0.875rem;
+  padding-left: 1.25rem;
+}
+.prose li {
+  margin-top: 0.375rem;
+}
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.375rem;
+}
+.prose ul {
+  list-style: none;
+  padding-left: 1.125rem;
+}
+.prose ul > li {
+  position: relative;
+}
+.prose ul > li::before {
+  content: '';
+  position: absolute;
+  left: -1.125rem;
+  top: 0.75em;
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: var(--dim);
+}
+
+.prose blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 2px solid var(--acc);
+  color: var(--dim);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 2.5rem 0;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+/* 인라인 코드 */
+.prose :not(pre) > code {
+  font-family: var(--mono);
+  font-size: 0.844em;
+  background: var(--chip);
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+}
+
+/* 코드 블록 — Shiki 가 라이트/다크 두 테마를 함께 넣어줍니다 */
+.prose pre {
+  font-family: var(--mono);
+  font-size: 0.781rem;
+  line-height: 1.7;
+  padding: 1rem 1.125rem;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  overflow-x: auto;
+}
+.prose pre > code {
+  font-family: inherit;
+  background: none;
+  padding: 0;
+}
+
+/* Shiki 이중 테마 전환 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .astro-code,
+  :root:not([data-theme='light']) .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+}
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+/* 표 — 좁은 화면에서 가로 스크롤 */
+.prose .table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+}
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.844rem;
+  line-height: 1.6;
+}
+.prose th,
+.prose td {
+  padding: 0.625rem 0.875rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--rule);
+}
+.prose th {
+  font-family: var(--mono);
+  font-size: 0.688rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+  font-weight: 500;
+  white-space: nowrap;
+  background: var(--chip);
+}
+.prose tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* 수식 — 빌드 시 KaTeX 로 렌더됩니다 */
+.prose .katex {
+  font-size: 1.04em;
+}
+.prose .katex-display {
+  margin: 1.5rem 0;
+  padding: 1rem 0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--chip);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+}
+
+.prose figure {
+  margin: 1.75rem 0;
+}
+.prose figcaption {
+  margin-top: 0.625rem;
+  font-family: var(--mono);
+  font-size: 0.688rem;
+  color: var(--dim);
+}

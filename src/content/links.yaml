@@ -1,0 +1,26 @@
+# 다른 곳에 쓴 글 (북마크).
+#
+# 항목 하나 추가 = 아래 형식으로 4~5줄. id 는 쓸 필요 없습니다.
+# 날짜순 정렬은 자동이라 순서는 신경 쓰지 않아도 됩니다.
+#
+#   - title: "글 제목"
+#     date: 2026-07-11
+#     url: https://velog.io/@juunho/슬러그
+#     source: velog          # 목록 오른쪽에 "↗ velog" 로 표시됩니다
+#     tags: [RAG, Evaluation]
+#     note: "리랭커 부분만 보셔도 됩니다"   # 선택 — 목록에 한 줄로 붙습니다
+#
+# 아래 두 개는 형식을 보여주는 예시입니다. 실제 링크로 바꾸거나 지우세요.
+
+- title: "RAG 검색 품질을 어떻게 측정할 것인가"
+  date: 2026-07-11
+  url: https://velog.io/@juunho/rag-retrieval-eval
+  source: velog
+  tags: [RAG, Evaluation]
+  note: "MRR과 Recall 중 무엇을 봐야 하는지에 대한 글입니다."
+
+- title: "하드 네거티브 채굴이 검색 성능을 바꾸는 지점"
+  date: 2026-02-14
+  url: https://medium.com/@juunho/hard-negative-mining
+  source: Medium
+  tags: [Embedding, Contrastive Learning]
