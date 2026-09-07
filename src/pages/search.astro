@@ -1,0 +1,149 @@
+---
+import Base from '../layouts/Base.astro';
+
+/**
+ * Pagefind 는 빌드가 끝난 뒤 dist/ 를 훑어 /pagefind/ 아래에 인덱스와 UI를
+ * 생성합니다 (npm run build 의 두 번째 단계). 그래서 dev 서버에는 아직
+ * 파일이 없고, 아래 스크립트가 조용히 실패하면 안내 문구로 대체됩니다.
+ */
+---
+
+<Base title="검색" description="글 전문 검색.">
+  <link slot="head" rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+
+  <div class="page page--narrow">
+    <header class="head">
+      <h1 class="display">검색</h1>
+      <p class="note">
+        여기 쓴 글은 본문까지, 다른 데 쓴 글은 제목과 메모까지 검색됩니다.
+      </p>
+    </header>
+
+    <div id="search" class="mount">
+      <p class="pending" id="search-pending">검색을 불러오는 중…</p>
+    </div>
+
+    <noscript>
+      <p class="pending">
+        검색에는 자바스크립트가 필요합니다.
+        <a href="/writing/">글 목록</a>에서 직접 찾아보세요.
+      </p>
+    </noscript>
+  </div>
+</Base>
+
+<script is:inline src="/pagefind/pagefind-ui.js" defer></script>
+<script is:inline>
+  window.addEventListener('DOMContentLoaded', function () {
+    var mount = document.getElementById('search');
+    var pending = document.getElementById('search-pending');
+
+    if (typeof window.PagefindUI !== 'function') {
+      if (pending) {
+        pending.textContent =
+          '개발 서버에는 검색 인덱스가 없습니다. npm run build 후 npm run preview 로 확인하세요.';
+      }
+      return;
+    }
+
+    if (pending) pending.remove();
+
+    new window.PagefindUI({
+      element: '#search',
+      showSubResults: true,
+      showImages: false,
+      excerptLength: 24,
+      translations: {
+        placeholder: '무엇을 찾으시나요?',
+        clear_search: '지우기',
+        load_more: '더 보기',
+        search_label: '검색',
+        filters_label: '필터',
+        zero_results: '[SEARCH_TERM] 에 대한 결과가 없습니다',
+        many_results: '[SEARCH_TERM] 검색 결과 [COUNT]개',
+        one_result: '[SEARCH_TERM] 검색 결과 1개',
+        alt_search:
+          '[SEARCH_TERM] 결과가 없어 [DIFFERENT_TERM] 결과를 대신 보여줍니다',
+        search_suggestion:
+          '[SEARCH_TERM] 결과가 없습니다. 다른 검색어를 시도해 보세요',
+        searching: '[SEARCH_TERM] 검색 중…',
+      },
+    });
+  });
+</script>
+
+<style is:global>
+  /* Pagefind 기본 UI를 사이트 토큰에 맞춥니다 */
+  #search {
+    --pagefind-ui-scale: 0.8;
+    --pagefind-ui-primary: var(--ink);
+    --pagefind-ui-text: var(--ink);
+    --pagefind-ui-background: var(--paper);
+    --pagefind-ui-border: var(--edge);
+    --pagefind-ui-tag: var(--chip);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 4px;
+    --pagefind-ui-font: var(--sans);
+  }
+
+  #search .pagefind-ui__search-input {
+    font-family: var(--sans);
+    font-weight: 400;
+  }
+
+  #search .pagefind-ui__result-title {
+    font-family: var(--serif);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  #search .pagefind-ui__result-link {
+    color: var(--ink);
+  }
+  #search .pagefind-ui__result-link:hover {
+    color: var(--acc);
+  }
+
+  #search .pagefind-ui__result-excerpt {
+    color: var(--dim);
+    font-size: 0.875rem;
+  }
+
+  #search mark {
+    background: var(--acc-soft);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+</style>
+
+<style>
+  .head {
+    padding: 3rem 0 1.75rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+  }
+
+  .note {
+    margin: 1rem 0 0;
+    color: var(--dim);
+    font-size: 0.875rem;
+    max-width: 48ch;
+  }
+
+  .mount {
+    min-height: 4rem;
+  }
+
+  .pending {
+    color: var(--dim);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+  .pending a {
+    color: var(--acc);
+    border-bottom: 1px solid currentColor;
+  }
+</style>

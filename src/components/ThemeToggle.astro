@@ -1,0 +1,91 @@
+---
+/** OS 설정을 기본으로 쓰고, 누르면 그 세션 이후로 선택이 기억됩니다. */
+---
+
+<button
+  type="button"
+  id="theme-toggle"
+  class="toggle"
+  aria-label="밝은 화면과 어두운 화면 전환"
+>
+  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+    <path
+      class="sun"
+      fill="currentColor"
+      d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-8.5a.6.6 0 0 1-.6-.6V.6a.6.6 0 0 1 1.2 0v1.3a.6.6 0 0 1-.6.6Zm0 13a.6.6 0 0 1-.6-.6v-1.3a.6.6 0 0 1 1.2 0v1.3a.6.6 0 0 1-.6.6Zm7.4-7.4h-1.3a.6.6 0 0 1 0-1.2h1.3a.6.6 0 0 1 0 1.2Zm-13 0H1.1a.6.6 0 0 1 0-1.2h1.3a.6.6 0 0 1 0 1.2Zm10.8-4.9-.9.9a.6.6 0 0 1-.85-.85l.9-.9a.6.6 0 1 1 .85.85ZM4.55 12.3l-.9.9a.6.6 0 0 1-.85-.85l.9-.9a.6.6 0 1 1 .85.85Zm8.7.9-.9-.9a.6.6 0 0 1 .85-.85l.9.9a.6.6 0 0 1-.85.85ZM3.65 3.75l-.9-.9a.6.6 0 0 1 .85-.85l.9.9a.6.6 0 1 1-.85.85Z"
+    ></path>
+    <path
+      class="moon"
+      fill="currentColor"
+      d="M13.5 9.6A5.9 5.9 0 0 1 6.4 2.5a.6.6 0 0 0-.83-.68 6.7 6.7 0 1 0 8.6 8.6.6.6 0 0 0-.68-.83Z"
+    ></path>
+  </svg>
+</button>
+
+<style>
+  .toggle {
+    display: inline-grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: var(--dim);
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .toggle:hover {
+    color: var(--ink);
+    background: var(--chip);
+  }
+
+  /* 라이트일 때는 달(=다크로 전환), 다크일 때는 해를 보여줍니다 */
+  .sun {
+    display: none;
+  }
+  .moon {
+    display: block;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .sun {
+      display: block;
+    }
+    :root:not([data-theme='light']) .moon {
+      display: none;
+    }
+  }
+  :root[data-theme='dark'] .sun {
+    display: block;
+  }
+  :root[data-theme='dark'] .moon {
+    display: none;
+  }
+  :root[data-theme='light'] .sun {
+    display: none;
+  }
+  :root[data-theme='light'] .moon {
+    display: block;
+  }
+</style>
+
+<script>
+  const button = document.getElementById('theme-toggle');
+
+  button?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const prefersDark = window.matchMedia(
+      '(prefers-color-scheme: dark)',
+    ).matches;
+    const current = root.dataset.theme ?? (prefersDark ? 'dark' : 'light');
+    const next = current === 'dark' ? 'light' : 'dark';
+
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      /* 저장이 막혀 있어도 이번 페이지에서는 전환이 동작합니다 */
+    }
+  });
+</script>

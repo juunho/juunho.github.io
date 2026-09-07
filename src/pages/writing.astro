@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import WritingList from '../components/WritingList.astro';
+import { getWriting } from '../lib/writing';
+
+const entries = await getWriting();
+
+const internal = entries.filter((e) => !e.external).length;
+const external = entries.length - internal;
+---
+
+<Base title="글" description="juunho가 쓴 글 — 여기 쓴 글과 다른 곳에 쓴 글.">
+  <div class="page page--narrow">
+    <header class="head">
+      <h1 class="display">글</h1>
+      <p class="note">
+        여기 쓴 글 {internal}개, 다른 데 쓴 글 {external}개.
+        <span class="arrow" aria-hidden="true">↗</span> 표시가 있으면 외부 링크입니다.
+      </p>
+    </header>
+
+    {/*
+      외부 글은 본문이 없어서 개별 페이지가 없습니다. 이 목록을 인덱싱해야
+      제목·메모로도 검색에 걸립니다.
+    */}
+    <div data-pagefind-body>
+      <WritingList entries={entries} showDescription />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .head {
+    padding: 3rem 0 1.75rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+  }
+
+  .note {
+    margin: 1rem 0 0;
+    color: var(--dim);
+    font-size: 0.875rem;
+    max-width: 46ch;
+  }
+
+  .arrow {
+    color: var(--acc);
+  }
+</style>
