@@ -7,7 +7,8 @@ import { katexDisplayPlugin, katexInlinePlugin } from './src/lib/katex.js';
 
 export default defineConfig({
   site: SITE.url,
-  integrations: [sitemap()],
+  // 어드민은 사이트맵에 올리지 않습니다. 검색엔진에 알릴 페이지가 아닙니다.
+  integrations: [sitemap({ filter: (page) => !page.includes('/admin/') })],
   // 빌드 시 폰트를 내려받아 같이 배포합니다. 방문자 브라우저가 Google에
   // 요청하지 않고, 폰트가 늦게 떠서 글자가 튀는 현상도 없습니다.
   fonts: [

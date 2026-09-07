@@ -1,29 +1,41 @@
 import type { APIRoute } from 'astro';
 
 /**
- * 로컬 전용 어드민 (Sveltia CMS).
+ * 어드민 (Sveltia CMS). https://juunho.github.io/admin/
  *
- * **이 경로는 배포되지 않습니다.** getStaticPaths 가 프로덕션 빌드에서 빈
- * 배열을 돌려주기 때문에 dist/ 에 admin 관련 파일이 아예 생기지 않습니다.
- * GitHub Pages 는 정적 호스팅이라 배포된 파일에 비밀번호를 걸 수 없으므로,
- * "나만 접근" 을 만족시키는 방법은 애초에 내보내지 않는 것뿐입니다.
+ * 어디서든 — 다른 PC, 폰 — 글을 쓸 수 있게 배포합니다.
  *
- * 쓰는 법:
- *   npm run dev  →  http://localhost:4321/admin/index.html
- *   (Chrome / Edge / Brave — Firefox 와 Safari 는 안 됩니다)
+ * ## 접근에 대해
  *
- * 처음 열면 브라우저가 폴더 선택을 요청합니다. 이 저장소 루트를 고르면
- * File System Access API 로 파일을 직접 읽고 씁니다. 토큰도, 로그인도,
- * 프록시 서버도 필요 없습니다. 저장하면 로컬 파일이 바뀌고, 평소처럼
- * git commit && git push 하면 배포됩니다.
+ * GitHub Pages 는 정적 호스팅이라 배포된 파일 앞에 인증을 세울 수 없습니다.
+ * 그래서 이 URL 자체는 누구나 열 수 있습니다. 다만 **열어도 아무것도 없습니다** —
+ * 이 페이지는 빈 껍데기이고, 이 저장소에 쓰기 권한이 있는 GitHub 자격증명이
+ * 없으면 로그인 화면에서 더 나아가지 못합니다. 초안을 읽을 수도, 무언가를
+ * 쓸 수도 없습니다. 아래 config 가 드러내는 것은 폴더 이름뿐인데, 저장소가
+ * 어차피 공개라 새로 새는 정보도 없습니다.
  *
- * Firefox 와 Safari 는 File System Access API 가 없어서 동작하지 않습니다.
+ * URL 존재 자체를 감추려면 GitHub Pages 를 벗어나야 합니다
+ * (예: Cloudflare Pages + Cloudflare Access).
+ *
+ * ## 로그인
+ *
+ * 로그인 화면의 **Sign In with Token** 을 누르면 필요한 권한이 미리 선택된
+ * GitHub 토큰 발급 링크가 뜹니다. fine-grained 토큰을 이 저장소 하나로,
+ * Contents: Read and write 만 주고 만드세요. 토큰은 그 브라우저에만 저장되고
+ * 저장소에는 절대 들어가지 않습니다.
+ *
+ * "Sign in with GitHub" 버튼(OAuth)으로 바꾸려면 인증용 서버가 하나 필요합니다.
+ * sveltia-cms-auth 를 Cloudflare Workers 무료 플랜에 올리고, 아래 backend 에
+ * base_url 한 줄을 추가하면 됩니다.
+ *
+ * ## 로컬에서 쓰기
+ *
+ * npm run dev → http://localhost:4321/admin/index.html 을 Chrome/Edge/Brave 로
+ * 열면 토큰 없이 로컬 파일을 직접 고치는 모드로 동작합니다 (File System
+ * Access API). 배포본과 같은 설정을 그대로 씁니다.
  */
 
 export function getStaticPaths() {
-  // 프로덕션 빌드에서는 경로가 하나도 생성되지 않습니다.
-  if (!import.meta.env.DEV) return [];
-
   // index.html 을 명시적으로 씁니다. slug 없이 /admin 을 함께 등록하면
   // 두 경로가 같은 출력 파일로 겹쳐서 빌드가 막힙니다.
   return [{ params: { slug: 'index.html' } }, { params: { slug: 'config.yml' } }];
@@ -35,7 +47,7 @@ const SHELL = `<!doctype html>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>juunho — 어드민 (로컬 전용)</title>
+    <title>juunho — 어드민</title>
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
   </head>
   <body>
@@ -51,11 +63,19 @@ const SHELL = `<!doctype html>
 const CONFIG = `# 이 파일은 src/pages/admin/[...slug].ts 가 dev 서버에서만 생성합니다.
 # 고치려면 그 파일을 여세요.
 
-# 로컬 모드에서는 이 backend 설정을 쓰지 않지만, 항목 자체는 있어야 합니다.
 backend:
   name: github
   repo: juunho/juunho.github.io
   branch: main
+  commit_messages:
+    create: 'admin: {{collection}} 추가 — {{slug}}'
+    update: 'admin: {{collection}} 수정 — {{slug}}'
+    delete: 'admin: {{collection}} 삭제 — {{slug}}'
+    uploadMedia: 'admin: 파일 업로드 — {{path}}'
+    deleteMedia: 'admin: 파일 삭제 — {{path}}'
+  # OAuth("Sign in with GitHub" 버튼)로 바꾸려면 인증 서버 주소를 여기에.
+  # 없으면 토큰 로그인만 쓰며, 그것만으로도 충분히 동작합니다.
+  # base_url: https://<your-worker>.workers.dev
 
 media_folder: public/uploads
 public_folder: /uploads

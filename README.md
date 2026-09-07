@@ -17,32 +17,59 @@ npm run build      # astro build + 검색 인덱스 생성
 npm run preview    # 빌드 결과를 그대로 확인
 ```
 
-## 어드민 (로컬 전용)
+## 어드민
 
-폼으로 글을 쓰고 이력·북마크를 고칠 수 있는 화면이 있습니다.
+<https://juunho.github.io/admin/> — 폼으로 글을 쓰고 이력·북마크를 고칩니다.
+[Sveltia CMS](https://github.com/sveltia/sveltia-cms) 를 씁니다.
+저장하면 이 저장소에 커밋되고, Actions 가 빌드해서 배포합니다 (1~2분).
 
-```bash
-npm run dev
-```
+### 처음 한 번: 토큰 만들기
 
-Chrome / Edge / Brave 로 **<http://localhost:4321/admin/index.html>** 을 엽니다.
-처음 열면 브라우저가 폴더를 물어보는데, 이 저장소 루트를 고르면 됩니다.
-저장하면 `src/content/` 아래 파일이 실제로 바뀌고, 평소처럼
-`git commit && git push` 하면 배포됩니다.
+로그인 화면에서 **Sign In with Token** 을 누르면 GitHub 토큰 발급 페이지
+링크가 뜹니다 (필요한 권한이 미리 선택되어 있습니다).
 
-로그인도 토큰도 필요 없습니다. [Sveltia CMS](https://github.com/sveltia/sveltia-cms) 가
-브라우저의 File System Access API 로 로컬 파일을 직접 다루기 때문입니다.
-그래서 **Firefox 와 Safari 에서는 동작하지 않습니다** — 이 API가 없습니다.
+fine-grained 토큰으로 만들되 범위를 좁히세요:
 
-> **어드민은 배포되지 않습니다.**
-> GitHub Pages 는 정적 호스팅이라 배포된 파일에 비밀번호를 걸 수 없습니다.
-> `/admin/` 을 올리면 URL 자체는 누구나 열 수 있게 되므로, 아예 내보내지
-> 않는 쪽을 택했습니다. `src/pages/admin/[...slug].ts` 가 dev 에서만 경로를
-> 만들고, CI 에도 혹시 섞여 들어가면 빌드를 실패시키는 스텝이 있습니다.
->
-> 폰이나 다른 컴퓨터에서도 쓰고 싶어지면 GitHub 토큰 방식으로 바꿀 수
-> 있습니다. 그때는 `/admin/` 이 공개 URL 이 되고, 토큰이 없는 사람에게는
-> 로그인 화면만 보입니다.
+- **Repository access** — `juunho/juunho.github.io` 하나만
+- **Permissions → Contents** — Read and write
+- 만료일을 짧게 두고 만료되면 새로 발급
+
+토큰은 그 브라우저에만 저장되고 저장소에는 들어가지 않습니다. 기기마다
+한 번씩 넣으면 됩니다. 공용 PC 에서는 쓰지 마세요.
+
+### 접근에 대해 — 알고 계셔야 할 것
+
+**`/admin/` URL 은 누구나 열 수 있습니다.** GitHub Pages 는 정적 호스팅이라
+배포된 파일 앞에 인증을 세울 수 없습니다.
+
+다만 **열어도 아무것도 없습니다.** 이 페이지는 빈 껍데기라, 이 저장소에
+쓰기 권한이 있는 GitHub 자격증명이 없으면 로그인 화면에서 막힙니다.
+초안을 읽을 수도, 무언가를 쓸 수도 없습니다. `config.yml` 이 드러내는 것은
+폴더 이름뿐인데 저장소가 어차피 공개라 새로 새는 정보도 없습니다.
+
+`robots.txt` 와 사이트맵에서 빼서 검색 결과에는 안 나오지만, 그건 가리는
+것이지 막는 게 아닙니다. 실제로 막는 것은 GitHub 로그인입니다.
+
+URL 존재 자체를 감추려면 GitHub Pages 를 벗어나야 합니다
+(예: Cloudflare Pages + Cloudflare Access — 무료 플랜으로 경로 앞에 진짜
+인증을 세울 수 있습니다).
+
+### 로그인 버튼으로 바꾸기 (선택)
+
+토큰을 붙여넣는 대신 "Sign in with GitHub" 버튼을 쓰려면 인증 서버가
+하나 필요합니다. [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth)
+를 Cloudflare Workers 무료 플랜에 올리고,
+`src/pages/admin/[...slug].ts` 의 `backend` 에 `base_url` 한 줄을 추가하면
+됩니다 (주석으로 자리를 남겨뒀습니다).
+
+### 로컬에서 쓰기
+
+`npm run dev` 후 Chrome / Edge / Brave 로
+<http://localhost:4321/admin/index.html> 을 열면 **토큰 없이** 로컬 파일을
+직접 고치는 모드로 동작합니다 (File System Access API). 폴더 선택에서
+이 저장소 루트를 고르면 됩니다. 저장하면 로컬 파일이 바뀌므로
+`git push` 는 직접 해야 합니다. Firefox 와 Safari 는 이 API 가 없어
+로컬 모드가 동작하지 않습니다.
 
 아래는 파일을 직접 고칠 때의 형식입니다. 어드민을 쓰면 폼이 대신 채워줍니다.
 
@@ -150,7 +177,7 @@ src/
   layouts/             Base, Post
   components/          Header, Footer, WritingList, WorkList, …
   pages/
-    admin/[...slug].ts 로컬 전용 어드민 (배포 안 됨)
+    admin/[...slug].ts 어드민 화면과 그 설정
     …                  홈, /writing, /tags, /about, /search, rss.xml
   styles/global.css    색 토큰과 타이포
 ```
