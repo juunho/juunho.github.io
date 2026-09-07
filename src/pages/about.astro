@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, SOCIAL } from '../consts';
+---
+
+<Base title="소개" description={SITE.description}>
+  <div class="page page--narrow">
+    <header class="head">
+      <h1 class="display">소개</h1>
+    </header>
+
+    <div class="prose">
+      <p>{SITE.bio}</p>
+
+      <p>
+        주로 검색 품질을 다룹니다. 임베딩 모델을 도메인에 맞게 학습시키고,
+        BM25 같은 어휘 기반 검색과 dense retrieval을 어떻게 섞을지 고민하고,
+        만들어진 모델을 비용 안에서 굴러가게 만드는 일까지가 범위입니다.
+      </p>
+
+      <p>
+        여기에는 정리해둘 만한 것만 가끔 씁니다. 다른 곳에 쓴 글도
+        <a href="/writing/">글 목록</a>에 같이 모아두었습니다.
+      </p>
+
+      <h2>연락</h2>
+      <ul>
+        {
+          SOCIAL.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                target={item.href.startsWith('http') ? '_blank' : undefined}
+                rel={
+                  item.href.startsWith('http')
+                    ? 'noopener noreferrer'
+                    : undefined
+                }
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .head {
+    padding: 3rem 0 1.75rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+  }
+</style>

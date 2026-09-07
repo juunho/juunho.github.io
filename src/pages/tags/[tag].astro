@@ -1,0 +1,68 @@
+---
+import Base from '../../layouts/Base.astro';
+import WritingList from '../../components/WritingList.astro';
+import { getWritingByTag, tagSlug, type WritingEntry } from '../../lib/writing';
+
+export async function getStaticPaths() {
+  const byTag = await getWritingByTag();
+
+  return [...byTag.entries()].map(([tag, entries]) => ({
+    params: { tag: tagSlug(tag) },
+    props: { tag, entries },
+  }));
+}
+
+type Props = { tag: string; entries: WritingEntry[] };
+
+const { tag, entries } = Astro.props;
+---
+
+<Base title={tag} description={`${tag} 태그가 붙은 글 ${entries.length}개.`}>
+  <div class="page page--narrow">
+    <header class="head">
+      <p class="kicker">태그</p>
+      <h1 class="display">{tag}</h1>
+      <p class="note">{entries.length}개의 글</p>
+    </header>
+
+    <WritingList entries={entries} showDescription />
+
+    <a class="back" href="/tags/">← 전체 태그</a>
+  </div>
+</Base>
+
+<style>
+  .head {
+    padding: 3rem 0 1.75rem;
+  }
+
+  .kicker {
+    margin: 0 0 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.656rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+  }
+
+  .note {
+    margin: 0.875rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.688rem;
+    color: var(--dim);
+  }
+
+  .back {
+    display: inline-block;
+    margin-top: 1.75rem;
+    font-family: var(--mono);
+    font-size: 0.719rem;
+    color: var(--acc);
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+  }
+</style>

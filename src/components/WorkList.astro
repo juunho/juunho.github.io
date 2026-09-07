@@ -1,0 +1,135 @@
+---
+import { getCollection } from 'astro:content';
+
+const work = (await getCollection('work')).sort(
+  (a, b) => b.data.order - a.data.order,
+);
+---
+
+<ul class="work">
+  {
+    work.map(({ data }) => (
+      <li>
+        <div class="when">{data.period}</div>
+        <div>
+          <h3>
+            {data.title}
+            <span class="kind">{data.kind}</span>
+          </h3>
+          <p>{data.summary}</p>
+          {(data.stack.length > 0 || data.link) && (
+            <div class="row">
+              {data.stack.map((item) => (
+                <span class="chip">{item}</span>
+              ))}
+              {data.link && (
+                <a
+                  href={data.link.href}
+                  target={
+                    data.link.href.startsWith('http') ? '_blank' : undefined
+                  }
+                  rel={
+                    data.link.href.startsWith('http')
+                      ? 'noopener noreferrer'
+                      : undefined
+                  }
+                >
+                  {data.link.label} →
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .work {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 1.5rem;
+    padding: 1.375rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .when {
+    font-family: var(--mono);
+    font-size: 0.688rem;
+    color: var(--dim);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.42em;
+    line-height: 1.5;
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.188rem;
+    line-height: 1.34;
+    letter-spacing: -0.018em;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    flex-wrap: wrap;
+    text-wrap: balance;
+  }
+
+  .kind {
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  p {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+    color: var(--dim);
+    line-height: 1.72;
+    max-width: 58ch;
+  }
+
+  .row {
+    margin-top: 0.6875rem;
+    display: flex;
+    gap: 0.5rem 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 0.656rem;
+  }
+
+  .row a {
+    color: var(--acc);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+    transition: border-color 0.2s ease;
+  }
+  .row a:hover {
+    border-bottom-color: var(--acc);
+  }
+
+  @media (max-width: 34rem) {
+    li {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .when {
+      padding-top: 0;
+    }
+  }
+</style>
