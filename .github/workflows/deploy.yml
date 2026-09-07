@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # PR 에서는 빌드만 돌려서 머지 전에 깨지는지 확인합니다 (배포는 안 함).
+  pull_request:
+    branches: [main]
   # Actions 탭에서 수동으로도 돌릴 수 있게
   workflow_dispatch:
 
@@ -35,13 +38,25 @@ jobs:
       - name: Build site and search index
         run: npm run build
 
+      # 빌드는 폰트를 네트워크에서 받아옵니다. 실패해도 폴백 폰트로 빌드가
+      # 통과해버리므로, 폰트 파일이 실제로 나왔는지 확인합니다.
+      - name: Verify fonts were downloaded
+        run: |
+          count=$(find dist/_astro/fonts -type f 2>/dev/null | wc -l)
+          echo "downloaded font files: $count"
+          if [ "$count" -eq 0 ]; then
+            echo "::warning::폰트를 받지 못해 폴백 서체로 빌드되었습니다."
+          fi
+
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
