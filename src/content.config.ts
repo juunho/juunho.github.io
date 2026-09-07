@@ -45,21 +45,24 @@ const work = defineCollection({
 /**
  * 다른 데 쓴 글 (북마크). src/content/links.yaml
  *
- * id 를 직접 쓸 필요가 없도록 파서에서 url 로부터 만들어 넣습니다.
- * 항목 하나 추가 = 아래 4~5줄:
+ * 파일은 `links:` 키 아래 목록을 담습니다. 최상위가 배열이면 Git 기반 CMS
+ * (/admin/) 가 파일을 편집하지 못하기 때문입니다.
+ * id 는 파서에서 url 로부터 만들어 넣으므로 직접 쓸 필요가 없습니다.
  *
- *   - title: "RAG 검색 품질을 어떻게 측정할 것인가"
- *     date: 2026-07-11
- *     url: https://velog.io/@juunho/rag-eval
- *     source: velog
- *     tags: [RAG, Evaluation]
+ *   links:
+ *     - title: "RAG 검색 품질을 어떻게 측정할 것인가"
+ *       date: 2026-07-11
+ *       url: https://velog.io/@juunho/rag-eval
+ *       source: velog
+ *       tags: [RAG, Evaluation]
  */
 const links = defineCollection({
   loader: file('./src/content/links.yaml', {
     parser: (text) => {
-      const raw = parseYaml(text);
-      if (!Array.isArray(raw)) return [];
-      return raw.map((entry, i) => {
+      const doc = parseYaml(text) as { links?: unknown } | null;
+      const list = doc?.links;
+      if (!Array.isArray(list)) return [];
+      return list.map((entry, i) => {
         const item = entry as Record<string, unknown>;
         return { id: slugifyUrl(String(item.url ?? i)), ...item };
       });

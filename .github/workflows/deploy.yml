@@ -48,6 +48,19 @@ jobs:
             echo "::warning::폰트를 받지 못해 폴백 서체로 빌드되었습니다."
           fi
 
+      # 어드민은 로컬 전용입니다. GitHub Pages 에는 접근 제어를 걸 수 없으므로
+      # 배포물에 섞여 들어가면 누구나 열 수 있게 됩니다. 그럴 바엔 빌드를
+      # 실패시킵니다.
+      - name: Fail if the admin leaked into the build
+        run: |
+          if find dist -iname '*admin*' | grep -q . || grep -rlq sveltia dist; then
+            echo "::error::어드민이 배포물에 포함되었습니다. 로컬 전용이어야 합니다."
+            find dist -iname '*admin*'
+            grep -rl sveltia dist || true
+            exit 1
+          fi
+          echo "admin is absent from dist, as expected"
+
       - name: Upload artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
