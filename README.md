@@ -59,8 +59,41 @@ URL 존재 자체를 감추려면 GitHub Pages 를 벗어나야 합니다
 토큰을 붙여넣는 대신 "Sign in with GitHub" 버튼을 쓰려면 인증 서버가
 하나 필요합니다. [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth)
 를 Cloudflare Workers 무료 플랜에 올리고,
-`src/pages/admin/[...slug].ts` 의 `backend` 에 `base_url` 한 줄을 추가하면
+`public/admin/config.yml` 의 `backend` 에 `base_url` 한 줄을 추가하면
 됩니다 (주석으로 자리를 남겨뒀습니다).
+
+### 폼 자체를 고치기
+
+어드민의 폼은 **`public/admin/config.yml`** 이 정의합니다. 이 파일을 고치면
+폼이 바뀝니다. 파일 맨 위 주석에 무엇을 고쳐도 되는지 정리해뒀습니다.
+
+**어디서 고치나** — github.com 에서 이 파일을 열고 연필 아이콘을 누르면
+됩니다. 폰에서도 되고 문법 강조도 나옵니다. 또는 로컬에서 고치고 push.
+
+**어드민 화면 안에서는 못 고칩니다.** Sveltia 에 설정 편집 UI 가 아직
+없습니다 (로드맵에는 [올라와 있습니다](https://github.com/sveltia/sveltia-cms/discussions/452)).
+
+바로 고쳐도 되는 것:
+
+| | |
+|---|---|
+| `label`, `label_singular` | 사이드바와 버튼에 보이는 이름 (`글` → `포스트`) |
+| `description`, `hint` | 폼에 뜨는 설명 문구 |
+| `fields` 순서 | 입력칸 위아래 |
+| `required`, `default`, `collapsed` | 입력 편의 |
+| `sortable_fields`, `summary`, `view_groups` | 목록 화면 |
+
+**필드를 새로 추가하는 것도 안전합니다.** 사이트 빌드는 모르는 항목을
+조용히 무시하므로 깨지지 않습니다. 다만 그 값이 화면에 나오려면 두 곳을
+더 고쳐야 합니다 — `src/content.config.ts` 의 스키마, 그리고 실제로
+출력할 컴포넌트.
+
+**필드를 지울 때는** `src/content.config.ts` 에서 필수로 잡힌 항목인지
+먼저 확인하세요. 필수 항목을 폼에서 없애면 그 뒤로 저장한 글이 빌드에서
+걸립니다.
+
+YAML 문법이 깨지면 어드민이 열리지 않지만, CI 가 배포 전에 잡아서 빌드를
+실패시킵니다. 이미 커밋했다면 github.com 에서 되돌리면 살아납니다.
 
 ### 로컬에서 쓰기
 
@@ -176,12 +209,9 @@ src/
     katex.ts           빌드 타임 수식 렌더링
   layouts/             Base, Post
   components/          Header, Footer, WritingList, WorkList, …
-  pages/
-    admin/[...slug].ts 어드민 화면과 그 설정
-    …                  홈, /writing, /tags, /about, /search, rss.xml
+  pages/               홈, /writing, /tags, /about, /search, rss.xml
   styles/global.css    색 토큰과 타이포
 ```
 
-어드민 폼을 고치려면 `src/pages/admin/[...slug].ts` 안의 `CONFIG` 를 고칩니다.
-필드는 `src/content.config.ts` 의 스키마와 맞아야 합니다 — 한쪽만 바꾸면
-저장한 파일이 스키마 검증에서 걸립니다.
+어드민은 `public/admin/` 에 있습니다 — `index.html` 이 화면,
+`config.yml` 이 폼 정의입니다. 위의 **폼 자체를 고치기** 를 참고하세요.

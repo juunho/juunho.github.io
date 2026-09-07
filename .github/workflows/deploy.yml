@@ -62,6 +62,32 @@ jobs:
           fi
           echo "admin present, no credentials embedded"
 
+      # config.yml 은 손으로 고치는 파일입니다. YAML 이 깨지면 어드민이 아예
+      # 열리지 않으므로, 배포하기 전에 여기서 걸러냅니다.
+      - name: Validate the admin config
+        run: |
+          node --input-type=module -e "
+            import { load } from 'js-yaml';
+            import { readFileSync } from 'node:fs';
+
+            let config;
+            try {
+              config = load(readFileSync('dist/admin/config.yml', 'utf8'));
+            } catch (error) {
+              console.log('::error::어드민 config.yml 의 YAML 문법이 깨졌습니다: ' + error.message);
+              process.exit(1);
+            }
+
+            const names = (config?.collections ?? []).map((c) => c.name);
+            for (const required of ['posts', 'work', 'links']) {
+              if (!names.includes(required)) {
+                console.log('::error::어드민 config.yml 에 \'' + required + '\' 컬렉션이 없습니다.');
+                process.exit(1);
+              }
+            }
+            console.log('admin config is valid; collections: ' + names.join(', '));
+          "
+
       - name: Upload artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
