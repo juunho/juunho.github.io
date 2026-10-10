@@ -1,9 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
-const work = (await getCollection('work')).sort(
-  (a, b) => b.data.order - a.data.order,
-);
+interface Props {
+  entries: CollectionEntry<'work'>[];
+}
+
+const { entries } = Astro.props;
+const work = [...entries].sort((a, b) => b.data.order - a.data.order);
 ---
 
 <ul class="work">
