@@ -4,11 +4,12 @@ import Base from '../layouts/Base.astro';
 import WorkList from '../components/WorkList.astro';
 import WritingList from '../components/WritingList.astro';
 import { getWriting } from '../lib/writing';
-import { HOME_WRITING_LIMIT, SITE, SOCIAL } from '../consts';
+import { getSiteCopy } from '../lib/site';
+import { HOME_WRITING_LIMIT } from '../consts';
 
+const copy = await getSiteCopy();
 const work = await getCollection('work');
 const writing = (await getWriting()).slice(0, HOME_WRITING_LIMIT);
-const [line1, line2] = SITE.headline;
 
 // 비어 있는 섹션은 아예 그리지 않습니다. 섹션 번호는 보이는 것만 셉니다.
 const sections = [
@@ -23,12 +24,12 @@ const numberOf = (key: string) =>
   <div class="page">
     <header class="masthead">
       <h1 class="display">
-        {line1}<br /><span>{line2}</span>
+        {copy.headline_top}<br /><span>{copy.headline_accent}</span>
       </h1>
-      <p class="bio">{SITE.bio}</p>
+      <p class="bio">{copy.bio}</p>
       <div class="links">
         {
-          SOCIAL.map((item) => (
+          copy.social.map((item) => (
             <a
               href={item.href}
               target={item.href.startsWith('http') ? '_blank' : undefined}

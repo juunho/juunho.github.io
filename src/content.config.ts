@@ -94,4 +94,35 @@ function slugifyUrl(url: string): string {
     .slice(0, 90);
 }
 
-export const collections = { posts, work, links };
+/**
+ * 사이트 문구. src/content/site.yaml 하나가 'site' 라는 항목 하나가 됩니다.
+ * 어드민의 Site 폼이 이 파일을 편집합니다.
+ */
+const site = defineCollection({
+  loader: file('./src/content/site.yaml', {
+    parser: (text) => {
+      const doc = parseYaml(text);
+      if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return [];
+      return [{ id: 'site', ...(doc as Record<string, unknown>) }];
+    },
+  }),
+  schema: z.object({
+    headline_top: z.string(),
+    headline_accent: z.string(),
+    bio: z.string(),
+    description: z.string(),
+    social: z
+      .array(z.object({ label: z.string(), href: z.string() }))
+      .default([]),
+  }),
+});
+
+/** 단독 페이지 본문. 지금은 About 하나. src/content/pages/*.md */
+const pages = defineCollection({
+  loader: glob({ base: './src/content/pages', pattern: '**/*.md' }),
+  schema: z.object({
+    title: z.string(),
+  }),
+});
+
+export const collections = { posts, work, links, site, pages };

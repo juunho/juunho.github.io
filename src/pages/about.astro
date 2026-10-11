@@ -1,33 +1,29 @@
 ---
+import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { SITE, SOCIAL } from '../consts';
+import { getSiteCopy } from '../lib/site';
+
+const copy = await getSiteCopy();
+const page = await getEntry('pages', 'about');
+if (!page) {
+  throw new Error('src/content/pages/about.md 가 없습니다.');
+}
+const { Content } = await render(page);
 ---
 
-<Base title="About" description={SITE.description}>
+<Base title={page.data.title} description={copy.description}>
   <div class="page page--narrow">
     <header class="head">
-      <h1 class="display">About</h1>
+      <h1 class="display">{page.data.title}</h1>
     </header>
 
     <div class="prose">
-      <p>{SITE.bio}</p>
-
-      <p>
-        Most of my time goes to search quality: fine-tuning embedding models
-        for a domain, deciding how lexical search and dense retrieval should
-        share the work, and making the result run within budget.
-      </p>
-
-      <p>
-        I write here when something is worth keeping. Posts published
-        elsewhere are collected on the <a href="/writing/">writing</a> page
-        as well.
-      </p>
+      <Content />
 
       <h2>Elsewhere</h2>
       <ul>
         {
-          SOCIAL.map((item) => (
+          copy.social.map((item) => (
             <li>
               <a
                 href={item.href}

@@ -1,15 +1,12 @@
-/** 사이트 전역 설정. 여기만 고치면 사이트 전체에 반영됩니다. */
+/**
+ * 사이트 전역 설정 — 구조에 관한 것만 둡니다.
+ * 화면에 보이는 문구(헤드라인, 소개, 링크, About 본문)는 어드민에서 고칠 수
+ * 있도록 src/content/site.yaml 과 src/content/pages/about.md 에 있습니다.
+ */
 
 export const SITE = {
   url: 'https://juunho.github.io',
   title: 'juunho',
-  /** 홈 마스트헤드에 크게 들어가는 두 줄. 둘째 줄에 강조색이 들어갑니다. */
-  headline: ['I build search', 'that works.'],
-  /** 마스트헤드 아래 소개 문단. */
-  bio: 'I work on the retrieval side of RAG systems: training embedding models, blending lexical and dense search, and keeping it fast under real traffic. Sometimes I write things down.',
-  /** <meta name="description"> 및 RSS 설명. */
-  description:
-    'Notes on retrieval, embeddings, and inference — the work and writing of juunho.',
   /** 사이트 UI 언어. 글은 frontmatter 의 lang 으로 따로 지정할 수 있습니다. */
   lang: 'en',
   author: 'juunho',
@@ -22,11 +19,6 @@ export const NAV = [
   { href: '/tags/', label: 'Tags' },
   { href: '/about/', label: 'About' },
   { href: '/search/', label: 'Search' },
-] as const;
-
-export const SOCIAL = [
-  { href: 'https://github.com/juunho', label: 'GitHub' },
-  { href: `mailto:${SITE.email}`, label: SITE.email },
 ] as const;
 
 /**

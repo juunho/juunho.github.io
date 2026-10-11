@@ -28,9 +28,10 @@
 #   먼저 optional 로 바꾸세요.
 #
 # 지금 필수인 항목
-#   글       title, date
-#   해온 일   title, kind, period, order, summary
-#   북마크    title, date, url, source
+#   사이트 문구  headline_top, headline_accent, bio, description
+#   글          title, date
+#   해온 일     title, kind, period, order, summary
+#   북마크      title, date, url, source
 
 backend:
   name: github
@@ -55,6 +56,58 @@ slug:
   clean_accents: true
 
 collections:
+  # ── 사이트 문구 ──────────────────────────────────────────────
+  - name: site
+    label: 사이트 문구
+    files:
+      - name: copy
+        label: 홈 · 메타 문구
+        file: src/content/site.yaml
+        description: '홈 마스트헤드의 헤드라인과 소개, 링크 미리보기용 한 줄, 연락처 링크.'
+        fields:
+          - {
+              name: headline_top,
+              label: 헤드라인 첫 줄,
+              widget: string,
+              hint: '예: Hi, I''m Juunho.',
+            }
+          - {
+              name: headline_accent,
+              label: 헤드라인 둘째 줄,
+              widget: string,
+              hint: '강조색으로 표시됩니다. 예: I put LLMs to work.',
+            }
+          - {
+              name: bio,
+              label: 소개 문단,
+              widget: text,
+              hint: '마스트헤드 아래 2~3문장.',
+            }
+          - {
+              name: description,
+              label: 한 줄 설명,
+              widget: text,
+              hint: '검색 결과와 링크 미리보기, RSS 에 쓰입니다. 160자 안팎.',
+            }
+          - name: social
+            label: 링크
+            widget: list
+            summary: '{{fields.label}}'
+            fields:
+              - { name: label, label: 표시할 문구, widget: string }
+              - {
+                  name: href,
+                  label: 주소,
+                  widget: string,
+                  hint: 'https://… 또는 mailto:…',
+                }
+      - name: about
+        label: About 페이지
+        file: src/content/pages/about.md
+        fields:
+          - { name: title, label: 제목, widget: string }
+          - { name: body, label: 본문, widget: markdown }
+
   # ── 여기에 직접 쓰는 글 ──────────────────────────────────────
   - name: posts
     label: 글
