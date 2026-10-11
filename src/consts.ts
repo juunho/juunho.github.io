@@ -3,23 +3,25 @@
 export const SITE = {
   url: 'https://juunho.github.io',
   title: 'juunho',
-  /** 홈 마스트헤드에 크게 들어가는 두 줄. */
-  headline: ['검색이 잘 되게', '만드는 사람'],
+  /** 홈 마스트헤드에 크게 들어가는 두 줄. 둘째 줄에 강조색이 들어갑니다. */
+  headline: ['I build search', 'that works.'],
   /** 마스트헤드 아래 소개 문단. */
-  bio: 'RAG 파이프라인의 검색 단을 설계하고, 임베딩 모델을 학습시키고, 그걸 실제 트래픽 위에서 버티게 만듭니다. 배운 건 가끔 글로 남깁니다.',
+  bio: 'I work on the retrieval side of RAG systems: training embedding models, blending lexical and dense search, and keeping it fast under real traffic. Sometimes I write things down.',
   /** <meta name="description"> 및 RSS 설명. */
-  description: '검색·임베딩·추론 최적화에 대한 기록. juunho의 작업과 글.',
-  lang: 'ko',
+  description:
+    'Notes on retrieval, embeddings, and inference — the work and writing of juunho.',
+  /** 사이트 UI 언어. 글은 frontmatter 의 lang 으로 따로 지정할 수 있습니다. */
+  lang: 'en',
   author: 'juunho',
   email: 'juunho.bae@gmail.com',
 } as const;
 
 export const NAV = [
-  { href: '/', label: '홈' },
-  { href: '/writing/', label: '글' },
-  { href: '/tags/', label: '태그' },
-  { href: '/about/', label: '소개' },
-  { href: '/search/', label: '검색' },
+  { href: '/', label: 'Home' },
+  { href: '/writing/', label: 'Writing' },
+  { href: '/tags/', label: 'Tags' },
+  { href: '/about/', label: 'About' },
+  { href: '/search/', label: 'Search' },
 ] as const;
 
 export const SOCIAL = [

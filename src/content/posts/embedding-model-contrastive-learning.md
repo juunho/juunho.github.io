@@ -9,6 +9,7 @@ tags:
   - Contrastive Learning
   - RAG
 draft: false
+lang: ko
 ---
 
 RAG 파이프라인에서 검색(Retrieval)의 품질은 임베딩 모델이 거의 결정합니다.

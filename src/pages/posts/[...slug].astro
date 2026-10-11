@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Post from '../../layouts/Post.astro';
+import { SITE } from '../../consts';
 
 export async function getStaticPaths() {
   // dev 서버에서는 초안도 열어볼 수 있게 하고, 빌드에서는 제외합니다.
@@ -19,8 +20,17 @@ type Props = { post: CollectionEntry<'posts'> };
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-/** 한글은 분당 약 500자로 잡습니다. */
-const readingMinutes = Math.max(1, Math.round(post.body!.length / 500));
+const lang = post.data.lang ?? SITE.lang;
+const body = post.body ?? '';
+// 한글은 분당 약 500자, 영어는 분당 약 200단어로 잡습니다.
+const readingMinutes = Math.max(
+  1,
+  Math.round(
+    lang === 'ko'
+      ? body.length / 500
+      : body.split(/\s+/).filter(Boolean).length / 200,
+  ),
+);
 ---
 
 <Post
@@ -30,6 +40,7 @@ const readingMinutes = Math.max(1, Math.round(post.body!.length / 500));
   tags={post.data.tags}
   draft={post.data.draft}
   readingMinutes={readingMinutes}
+  lang={lang}
 >
   <Content />
 </Post>

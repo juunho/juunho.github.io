@@ -12,7 +12,7 @@ export async function GET(context: APIContext) {
     title: SITE.title,
     description: SITE.description,
     site,
-    customData: `<language>ko</language>`,
+    customData: `<language>${SITE.lang}</language>`,
     items: entries.map((entry) => ({
       title: entry.title,
       pubDate: entry.date,

@@ -12,9 +12,11 @@ interface Props {
   tags: string[];
   draft?: boolean;
   readingMinutes?: number;
+  lang?: string;
 }
 
-const { title, date, description, tags, draft, readingMinutes } = Astro.props;
+const { title, date, description, tags, draft, readingMinutes, lang } =
+  Astro.props;
 ---
 
 <Base
@@ -22,15 +24,16 @@ const { title, date, description, tags, draft, readingMinutes } = Astro.props;
   description={description}
   type="article"
   publishedAt={date}
+  lang={lang}
 >
   <article class="page page--narrow">
     <header class="head">
-      {draft && <p class="draft">초안 — 아직 공개되지 않은 글입니다</p>}
+      {draft && <p class="draft">Draft — not published</p>}
       <h1 class="display">{title}</h1>
       {description && <p class="dek">{description}</p>}
       <div class="byline">
         <time datetime={date.toISOString()}>{formatDate(date)}</time>
-        {readingMinutes && <span>{readingMinutes}분</span>}
+        {readingMinutes && <span>{readingMinutes} min read</span>}
         {
           tags.length > 0 && (
             <span class="tags">

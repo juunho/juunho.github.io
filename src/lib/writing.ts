@@ -93,10 +93,15 @@ export function tagHref(tag: string): string {
   return `/tags/${encodeURIComponent(tagSlug(tag))}/`;
 }
 
-/** 목록에 쓰는 날짜 표기. 2026.08.24 */
+/** 목록에 쓰는 날짜 표기. ISO 형식(2026-08-24) — 고정폭 컬럼에 맞고 언어를 타지 않습니다. */
 export function formatDate(date: Date): string {
   const yyyy = date.getFullYear();
   const mm = String(date.getMonth() + 1).padStart(2, '0');
   const dd = String(date.getDate()).padStart(2, '0');
-  return `${yyyy}.${mm}.${dd}`;
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+/** "1 post" / "3 posts" 처럼 수에 맞춰 단복수를 붙입니다. */
+export function count(n: number, noun: string, plural = `${noun}s`): string {
+  return `${n} ${n === 1 ? noun : plural}`;
 }

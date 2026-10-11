@@ -12,8 +12,8 @@ const [line1, line2] = SITE.headline;
 
 // 비어 있는 섹션은 아예 그리지 않습니다. 섹션 번호는 보이는 것만 셉니다.
 const sections = [
-  { key: 'work', title: '해온 일', show: work.length > 0 },
-  { key: 'writing', title: '쓴 글', show: writing.length > 0 },
+  { key: 'work', show: work.length > 0 },
+  { key: 'writing', show: writing.length > 0 },
 ].filter((s) => s.show);
 const numberOf = (key: string) =>
   String(sections.findIndex((s) => s.key === key) + 1).padStart(2, '0');
@@ -47,7 +47,7 @@ const numberOf = (key: string) =>
       work.length > 0 && (
         <section class="section">
           <h2 class="label">
-            <span class="n">{numberOf('work')}</span> 해온 일
+            <span class="n">{numberOf('work')}</span> Work
           </h2>
           <WorkList entries={work} />
         </section>
@@ -58,10 +58,10 @@ const numberOf = (key: string) =>
       writing.length > 0 && (
         <section class="section">
           <h2 class="label">
-            <span class="n">{numberOf('writing')}</span> 쓴 글
+            <span class="n">{numberOf('writing')}</span> Writing
           </h2>
           <WritingList entries={writing} />
-          <a class="more" href="/writing/">글 전체 보기 →</a>
+          <a class="more" href="/writing/">All writing →</a>
         </section>
       )
     }
