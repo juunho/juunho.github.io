@@ -13,6 +13,11 @@ const posts = defineCollection({
     tags: z.array(z.string()).default([]),
     /** true 면 빌드에서 제외됩니다 (dev 서버에서는 보입니다). */
     draft: z.boolean().default(false),
+    /**
+     * 글의 언어. 비우면 사이트 언어(src/consts.ts 의 SITE.lang)를 따릅니다.
+     * <html lang> 과 읽는 시간 계산(한글은 글자 수, 영어는 단어 수)에 쓰입니다.
+     */
+    lang: z.string().optional(),
   }),
 });
 

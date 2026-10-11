@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import WritingList from '../../components/WritingList.astro';
-import { getWritingByTag, tagSlug, type WritingEntry } from '../../lib/writing';
+import { count, getWritingByTag, tagSlug, type WritingEntry } from '../../lib/writing';
 
 export async function getStaticPaths() {
   const byTag = await getWritingByTag();
@@ -17,17 +17,17 @@ type Props = { tag: string; entries: WritingEntry[] };
 const { tag, entries } = Astro.props;
 ---
 
-<Base title={tag} description={`${tag} 태그가 붙은 글 ${entries.length}개.`}>
+<Base title={tag} description={`${count(entries.length, 'post')} tagged ${tag}.`}>
   <div class="page page--narrow">
     <header class="head">
-      <p class="kicker">태그</p>
+      <p class="kicker">Tag</p>
       <h1 class="display">{tag}</h1>
-      <p class="note">{entries.length}개의 글</p>
+      <p class="note">{count(entries.length, 'post')}</p>
     </header>
 
     <WritingList entries={entries} showDescription />
 
-    <a class="back" href="/tags/">← 전체 태그</a>
+    <a class="back" href="/tags/">← All tags</a>
   </div>
 </Base>
 
