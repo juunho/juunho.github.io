@@ -1,0 +1,28 @@
+# 사이트 문구. 어드민(/admin/ → 사이트 문구)에서 고칠 수 있고, 여기서 직접 고쳐도 됩니다.
+#
+#   headline_top     홈 마스트헤드 첫 줄
+#   headline_accent  둘째 줄 — 강조색으로 표시됩니다
+#   bio              마스트헤드 아래 소개 문단 (2~3문장)
+#   description      <meta description>, 링크 미리보기, RSS 설명에 쓰이는 한 줄
+#   social           마스트헤드와 About 에 나오는 링크 목록
+#
+# About 페이지 본문은 src/content/pages/about.md 입니다.
+
+headline_top: Hi, I'm Juunho.
+headline_accent: I put LLMs to work.
+
+bio: >-
+  I'm an AI engineer at the Digital Service Lab, Yonsei University, working on
+  LLM applications and agents — the part between a promising demo and
+  something people can rely on. I write here when I learn something worth
+  keeping.
+
+description: >-
+  Juunho Bae — AI engineer working on LLM applications and agents.
+  Notes on building with language models.
+
+social:
+  - label: GitHub
+    href: https://github.com/juunho
+  - label: juunho.bae@gmail.com
+    href: mailto:juunho.bae@gmail.com

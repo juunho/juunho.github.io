@@ -3,14 +3,15 @@ import type { APIContext } from 'astro';
 
 import { SITE } from '../consts';
 import { getWriting } from '../lib/writing';
+import { getSiteCopy } from '../lib/site';
 
 export async function GET(context: APIContext) {
-  const entries = await getWriting();
+  const [entries, copy] = await Promise.all([getWriting(), getSiteCopy()]);
   const site = context.site ?? new URL(SITE.url);
 
   return rss({
     title: SITE.title,
-    description: SITE.description,
+    description: copy.description,
     site,
     customData: `<language>${SITE.lang}</language>`,
     items: entries.map((entry) => ({
