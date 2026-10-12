@@ -7,9 +7,17 @@
 #
 #   - title: "글 제목"
 #     date: 2026-07-11
-#     url: https://velog.io/@juunho/슬러그
-#     source: velog          # 목록 오른쪽에 "↗ velog" 로 표시됩니다
-#     tags: [RAG, Evaluation]
-#     note: "리랭커 부분만 보셔도 됩니다"   # 선택 — 목록에 한 줄로 붙습니다
+#     url: https://devocean.sk.com/blog/techBoardDetail.do?ID=…
+#     source: DEVOCEAN       # 목록 오른쪽에 "↗ DEVOCEAN" 으로 표시됩니다
+#     tags: [RAG, Reranker]
+#     note: "한 줄 메모"       # 선택 — 목록에 한 줄로 붙습니다
 
-links: []
+links:
+  # 날짜는 검색 결과의 상대 표기("552일 전")로 역산한 추정값입니다. 원문의
+  # 실제 게시일로 고쳐 주세요. 어드민 → 다른 데 쓴 글 에서 바로 됩니다.
+  - title: "RAG와 리랭커(Reranker): 검색 모델과 LLM의 상호작용"
+    date: 2025-04-08
+    url: https://devocean.sk.com/blog/techBoardDetail.do?ID=167335&boardType=techBlog
+    source: DEVOCEAN
+    tags: [RAG, Reranker]
+    note: "Why a reranker sits between retrieval and the LLM, and what changes when the reranker is itself an LLM."

@@ -2,14 +2,20 @@
 title: About
 ---
 
-I'm Juunho Bae, an AI engineer at the Digital Service Lab at Yonsei
-University.
+I'm Junho Bae, an AI Research Engineer at SK AX. I build agents and the
+retrieval systems behind them, and I've been shipping them since 2024.
 
-Most of my work is on LLM applications and agents: retrieval, tool use,
-evaluation, and the unglamorous engineering that turns a demo into something
-people can rely on. Earlier I trained embedding models for a retrieval
-system, which is still the kind of problem I like — where the model is only
-half the answer.
+Most recently that meant owning retrieval for a telecom carrier's
+customer-support agent — a domain embedding model, hybrid search, an LLM
+reranker that picks up new terms without retraining — and running the
+service from beta to general availability. Now I lead the vector and agent
+side of an AI-ready data platform: turning documents, tables and databases
+into context that multi-agent systems can search through MCP.
 
-I write here when something is worth keeping. Posts published elsewhere are
-collected on the [writing](/writing/) page as well.
+Before this: analytics engineering at Mobigen, and a master's in information
+systems at Yonsei, where I worked on graph neural networks for thin-file
+credit scoring.
+
+This site is notes — things that held up in production and are worth
+keeping. Posts published elsewhere, including on SK's DEVOCEAN, are
+collected on the [writing](/writing/) page.
