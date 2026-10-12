@@ -8,21 +8,24 @@
 #
 # About 페이지 본문은 src/content/pages/about.md 입니다.
 
-headline_top: Hi, I'm Juunho.
-headline_accent: I put LLMs to work.
+headline_top: Hi, I'm Junho.
+headline_accent: I build agents and RAG systems.
 
 bio: >-
-  I'm an AI engineer at the Digital Service Lab, Yonsei University, working on
-  LLM applications and agents — the part between a promising demo and
-  something people can rely on. I write here when I learn something worth
-  keeping.
+  I'm an AI Research Engineer at SK AX. I design and ship agentic RAG
+  systems — most recently a customer-support agent used by hundreds of
+  thousands of people a month, and now an AI-ready data platform that turns a
+  company's scattered knowledge into something multi-agent systems can
+  actually search. I write here when I learn something worth keeping.
 
 description: >-
-  Juunho Bae — AI engineer working on LLM applications and agents.
-  Notes on building with language models.
+  Junho Bae — AI Research Engineer at SK AX, building agents and RAG systems.
+  Notes on retrieval, agents, and getting LLMs into production.
 
 social:
   - label: GitHub
     href: https://github.com/juunho
+  - label: LinkedIn
+    href: https://www.linkedin.com/in/juunho/
   - label: juunho.bae@gmail.com
     href: mailto:juunho.bae@gmail.com
