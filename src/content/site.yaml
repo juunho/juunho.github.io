@@ -9,18 +9,15 @@
 # About 페이지 본문은 src/content/pages/about.md 입니다.
 
 headline_top: Hi, I'm Junho.
-headline_accent: I build agents and RAG systems.
+headline_accent: I like building agents that get used.
 
 bio: >-
-  I'm an AI Research Engineer at SK AX. I design and ship agentic RAG
-  systems — most recently a customer-support agent used by hundreds of
-  thousands of people a month, and now an AI-ready data platform that turns a
-  company's scattered knowledge into something multi-agent systems can
-  actually search. I write here when I learn something worth keeping.
+  AI Research Engineer at SK AX. I build agents and the retrieval behind
+  them, and this is where I write down what holds up in production.
 
 description: >-
-  Junho Bae — AI Research Engineer at SK AX, building agents and RAG systems.
-  Notes on retrieval, agents, and getting LLMs into production.
+  Junho Bae — AI Research Engineer at SK AX. Notes on agents and retrieval,
+  and what holds up in production.
 
 social:
   - label: GitHub
